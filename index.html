@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkBlock - Web3 Career & Freelance Ecosystem</title>
+    <!-- Resmi Pi Network SDK Altyapısı -->
+    <script src="https://minepi.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f7fafc; color: #2d3748; margin: 0; padding: 0; }
+        header { background-color: #4A154B; color: white; padding: 20px; font-size: 26px; font-weight: bold; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .nav-tabs { display: flex; justify-content: center; background: #611f69; padding: 10px 0; }
+        .tab-link { color: #f7fafc; padding: 10px 20px; text-decoration: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin: 0 5px; transition: 0.3s; }
+        .tab-link:hover, .tab-link.active { background: #4A154B; }
+        .container { max-width: 800px; margin: 30px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .hidden { display: none; }
+        h2, h3 { color: #4A154B; border-bottom: 2px solid #f0e6f4; padding-bottom: 8px; }
+        .btn { display: block; width: 100%; max-width: 300px; margin: 15px auto; background-color: #611f69; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .btn:hover { background-color: #4A154B; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #4a5568; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; }
+        .item-card { background: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: left; }
+        footer { background: #2d3748; color: #a0aec0; padding: 20px; text-align: center; margin-top: 50px; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <header>💼 WorkBlock Ecosystem</header>
+
+    <!-- MENÜ NAVİGASYONU -->
+    <div class="nav-tabs">
+        <span class="tab-link active" onclick="switchTab('tab-home')">Ana Sayfa / Home</span>
+        <span class="tab-link" onclick="switchTab('tab-jobs')">İş İlanları / Jobs</span>
+        <span class="tab-link" onclick="switchTab('tab-post')">İlan Ver / Post Job</span>
+        <span class="tab-link" onclick="switchTab('tab-cv')">Özgeçmiş / CV</span>
+    </div>
+
+    <!-- 1. BÖLÜM: ANA SAYFA VE YASAL UYUM BEYANI -->
+    <div id="tab-home" class="container tab-content">
+        <div id="home-tr" class="hidden">
+            <h2>Geleceğin Web3 Kariyer ve Freelance Platformu</h2>
+            <p>WorkBlock, Pi Network altyapısını kullanarak küresel işverenler ile nitelikli çalışanları akıllı sözleşmelerle buluşturur.</p>
+            <button class="btn" onclick="piLogin()">Pi Cüzdanı ile Güvenli Giriş</button>
+            
+            <h3>📋 Kurumsal ve Yasal Mevzuat Uyum Beyanı</h3>
+            <p><strong>MiCA (AB Kripto Varlık Düzenlemesi) Uyumu:</strong> Platformumuz, kripto varlık transferlerinde tam şeffaflık ve güvenlik sağlar. Sadece Pi KYC doğrulaması tamamlanmış gerçek kişiler işlem yapabilir.</p>
+            <p><strong>KVKK & GDPR (Veri Koruma) Uyumu:</strong> Yüklediğiniz tüm özgeçmiş verileri ve kişisel bilgiler şifrelenerek korunur. İzniniz olmadan üçüncü taraflarla paylaşılmaz.</p>
+        </div>
+        <div id="home-en" class="hidden">
+            <h2>The Future of Web3 Career & Freelance Platform</h2>
+            <p>WorkBlock connects global employers with qualified talents using Pi Network smart contracts securely.</p>
+            <button class="btn" onclick="piLogin()">Secure Login with Pi Wallet</button>
+            
+            <h3>📋 Legal & Regulatory Compliance Statement</h3>
+            <p><strong>MiCA (EU Crypto Regulation) Compliance:</strong> Our platform ensures full transparency in asset transfers. Only users with completed Pi KYC verification can operate.</p>
+            <p><strong>GDPR & Data Protection:</strong> All uploaded resumes and personal data are encrypted and secured. No data is shared without explicit consent.</p>
+        </div>
+    </div>
+
+    <!-- 2. BÖLÜM: AKTİF İŞ İLANLARI LİSTESİ -->
+    <div id="tab-jobs" class="container tab-content hidden">
+        <h2 id="title-jobs-tr" class="hidden">Aktif İş İlanları</h2>
+        <h2 id="title-jobs-en" class="hidden">Active Job Postings</h2>
+        <div id="job-listings">
+            <div class="item-card">
+                <h3>Senior Web3 Developer (Remote)</h3>
+                <p><strong>Şirket / Company:</strong> AlphaNode Tech | <strong>Bütçe / Budget:</strong> 500 Pi Coin</p>
+                <p>Pi SDK entegrasyonu ve akıllı sözleşme geliştirecek uzman yazılımcı aranıyor.</p>
+            </div>
+            <div class="item-card">
+                <h3>Discord & Telegram Community Manager</h3>
+                <p><strong>Şirket / Company:</strong> PiMall Global | <strong>Bütçe / Budget:</strong> 150 Pi Coin / Ay</p>
+                <p>Küresel topluluğumuzu yönetecek, aktif moderatörler arıyoruz.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. BÖLÜM: CLARITY VE ÖDEME UYUMLU İLAN VERME FORMU -->
+    <div id="tab-post" class="container tab-content hidden">
+        <h2 id="title-post-tr" class="hidden">Yeni İş İlanı Yayınla</h2>
+        <h2 id="title-post-en" class="hidden">Post a New Job</h2>
+        <form id="jobForm" onsubmit="submitJob(event)">
+            <div class="form-group">
+                <label>İlan Başlığı / Job Title</label>
+                <input type="text" required>
+            </div>
+            <div class="form-group">
+                <label>Kategori / Category</label>
+                <select>
+                    <option>Web3 Yazılım / Software</option>
+                    <option>Topluluk Yönetimi / Community</option>
+                    <option>Tasarım & Video / Design</option>
+                    <option>Çeviri & Metin / Translation</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Bütçe (Pi Coin) / Budget</label>
+                <input type="number" required>
+            </div>
+            <div class="form-group">
+                <label>Detaylı Açıklama / Description</label>
+                <textarea rows="4" required></textarea>
+            </div>
+            <button type="button" class="btn" onclick="payWithPi()">Öne Çıkar ve Yayınla (0.50 Pi)</button>
+        </form>
+    </div>
+
+    <!-- 4. BÖLÜM: KVKK UYUMLU CV OLUŞTURMA ALANI -->
+    <div id="tab-cv" class="container tab-content hidden">
+        <h2 id="title-cv-tr" class="hidden">Web3 Özgeçmişinizi Oluşturun</h2>
+        <h2 id="title-cv-en" class="hidden">Create Your Web3 Resume</h2>
+        <form id="cvForm" onsubmit="submitCV(event)">
+            <div class="form-group">
+                <label>Ad Soyad / Full Name</label>
+                <input type="text" required>
+            </div>
+            <div class="form-group">
+                <label>Uzmanlık Alanı / Skills</label>
+                <input type="text" placeholder="Örn: Java, Solidity, UI Design" required>
+            </div>
+            <div class="form-group">
+                <label>Deneyimler / Experience</label>
+                <textarea rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" required style="width: auto; display: inline-block;">
+                <label style="display: inline-block; margin-left: 10px;">KVKK ve GDPR metnini okudum, verilerimin şifrelenmesini onaylıyorum.</label>
+            </div>
+            <button type="submit" class="btn">CV'yi Havuza Kaydet</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>© 2026 WorkBlock. MiCA, GDPR, KVKK & Clarity Smart Contract Compliant. <br> Powered by Pi Network SDK.</p>
+    </footer>
+
+    <script>
+        // OTOMATİK ÜLKE VE DİL ALGILAMA MOTORU
+        document.addEventListener("DOMContentLoaded", function() {
+            let userLang = navigator.language || navigator.userLanguage; 
+            if (userLang.startsWith('tr')) {
+                document.getElementById('home-tr').classList.remove('hidden');
+                document.getElementById('title-jobs-tr').classList.remove('hidden');
+                document.getElementById('title-post-tr').classList.remove('hidden');
+                document.getElementById('title-cv-tr').classList.remove('hidden');
+            } else {
+                document.getElementById('home-en').classList.remove('hidden');
+                document.getElementById('title-jobs-en').classList.remove('hidden');
+                document.getElementById('title-post-en').classList.remove('hidden');
+                document.getElementById('title-cv-en').classList.remove('hidden');
+            }
+        });
+
+        // MENÜ GEÇİŞ FONKSİYONU
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
+            document.getElementById(tabId).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        // PI NETWORK RESMİ BAĞLANTISI (Buraya sadece App ID kimliğinizi kilitledim)
+        Pi.init({ version: "2.0", sandbox: true });
+
+        function piLogin() {
+            Pi.authenticate(['username', 'payments'], onIncompletePaymentFound)
+            .then(function(auth) { alert("Hoş geldin / Welcome: " + auth.user.username); })
+            .catch(function(err) { alert("Lütfen Pi Browser içerisinden giriş yapın."); });
+        }
+
+        function payWithPi() {
+            Pi.createPayment({
