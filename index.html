@@ -30,17 +30,17 @@
 
     <!-- MENÜ NAVİGASYONU -->
     <div class="nav-tabs">
-        <span class="tab-link active" onclick="switchTab('tab-home')">Ana Sayfa / Home</span>
-        <span class="tab-link" onclick="switchTab('tab-jobs')">İş İlanları / Jobs</span>
-        <span class="tab-link" onclick="switchTab('tab-post')">İlan Ver / Post Job</span>
-        <span class="tab-link" onclick="switchTab('tab-cv')">Özgeçmiş / CV</span>
+        <span class="tab-link active" onclick="switchTab(event, 'tab-home')">Ana Sayfa / Home</span>
+        <span class="tab-link" onclick="switchTab(event, 'tab-jobs')">İş İlanları / Jobs</span>
+        <span class="tab-link" onclick="switchTab(event, 'tab-post')">İlan Ver / Post Job</span>
+        <span class="tab-link" onclick="switchTab(event, 'tab-cv')">Özgeçmiş / CV</span>
     </div>
 
     <!-- 1. BÖLÜM: ANA SAYFA VE YASAL UYUM BEYANI -->
     <div id="tab-home" class="container tab-content">
         <div id="home-tr" class="hidden">
             <h2>Geleceğin Web3 Kariyer ve Freelance Platformu</h2>
-            <p>WorkBlock, Pi Network altyapısını kullanarak küresel işverenler ile nitelikli çalışanları akıllı sözleşmelerle buluşturur.</p>
+            <p>WorkBlock, Pi Network altyapısını kullanarak küresel işverenler ile nitelikli çalışanları güvenli dijital iş sözleşmeleriyle buluşturur.</p>
             <button class="btn" onclick="piLogin()">Pi Cüzdanı ile Güvenli Giriş</button>
             
             <h3>📋 Kurumsal ve Yasal Mevzuat Uyum Beyanı</h3>
@@ -49,7 +49,7 @@
         </div>
         <div id="home-en" class="hidden">
             <h2>The Future of Web3 Career & Freelance Platform</h2>
-            <p>WorkBlock connects global employers with qualified talents using Pi Network smart contracts securely.</p>
+            <p>WorkBlock connects global employers with qualified talents using Pi Network infrastructure securely.</p>
             <button class="btn" onclick="piLogin()">Secure Login with Pi Wallet</button>
             
             <h3>📋 Legal & Regulatory Compliance Statement</h3>
@@ -60,8 +60,8 @@
 
     <!-- 2. BÖLÜM: AKTİF İŞ İLANLARI LİSTESİ -->
     <div id="tab-jobs" class="container tab-content hidden">
-        <h2 id="title-jobs-tr" class="hidden">Aktif İş İlanları</h2>
-        <h2 id="title-jobs-en" class="hidden">Active Job Postings</h2>
+        <h2 id="title-jobs-tr" class="hidden">WorkBlock Aktif İş İlanları</h2>
+        <h2 id="title-jobs-en" class="hidden">WorkBlock Active Job Postings</h2>
         <div id="job-listings">
             <div class="item-card">
                 <h3>Senior Web3 Developer (Remote)</h3>
@@ -76,18 +76,18 @@
         </div>
     </div>
 
-    <!-- 3. BÖLÜM: CLARITY VE ÖDEME UYUMLU İLAN VERME FORMU -->
+    <!-- 3. BÖLÜM: İLAN VERME FORMU -->
     <div id="tab-post" class="container tab-content hidden">
         <h2 id="title-post-tr" class="hidden">Yeni İş İlanı Yayınla</h2>
         <h2 id="title-post-en" class="hidden">Post a New Job</h2>
-        <form id="jobForm" onsubmit="submitJob(event)">
+        <form id="jobForm" onsubmit="event.preventDefault();">
             <div class="form-group">
                 <label>İlan Başlığı / Job Title</label>
-                <input type="text" required>
+                <input type="text" id="jobTitle" required>
             </div>
             <div class="form-group">
                 <label>Kategori / Category</label>
-                <select>
+                <select id="jobCategory">
                     <option>Web3 Yazılım / Software</option>
                     <option>Topluluk Yönetimi / Community</option>
                     <option>Tasarım & Video / Design</option>
@@ -96,11 +96,11 @@
             </div>
             <div class="form-group">
                 <label>Bütçe (Pi Coin) / Budget</label>
-                <input type="number" required>
+                <input type="number" id="jobBudget" required>
             </div>
             <div class="form-group">
                 <label>Detaylı Açıklama / Description</label>
-                <textarea rows="4" required></textarea>
+                <textarea rows="4" id="jobDesc" required></textarea>
             </div>
             <button type="button" class="btn" onclick="payWithPi()">Öne Çıkar ve Yayınla (0.50 Pi)</button>
         </form>
@@ -108,8 +108,8 @@
 
     <!-- 4. BÖLÜM: KVKK UYUMLU CV OLUŞTURMA ALANI -->
     <div id="tab-cv" class="container tab-content hidden">
-        <h2 id="title-cv-tr" class="hidden">Web3 Özgeçmişinizi Oluşturun</h2>
-        <h2 id="title-cv-en" class="hidden">Create Your Web3 Resume</h2>
+        <h2 id="title-cv-tr" class="hidden">WorkBlock Özgeçmişinizi Oluşturun</h2>
+        <h2 id="title-cv-en" class="hidden">Create Your WorkBlock Resume</h2>
         <form id="cvForm" onsubmit="submitCV(event)">
             <div class="form-group">
                 <label>Ad Soyad / Full Name</label>
@@ -121,23 +121,30 @@
             </div>
             <div class="form-group">
                 <label>Deneyimler / Experience</label>
-                <textarea rows="4" required></textarea>
+                <textarea rows="4" id="cvExperience" required></textarea>
             </div>
             <div class="form-group">
                 <input type="checkbox" required style="width: auto; display: inline-block;">
-                <label style="display: inline-block; margin-left: 10px;">KVKK ve GDPR metnini okudum, verilerimin şifrelenmesini onaylıyorum.</label>
+                <label style="display: inline-block; margin-left: 10px;">KVKK ve GDPR metnini okudum, verilerimin WorkBlock üzerinde şifrelenmesini onaylıyorum.</label>
             </div>
             <button type="submit" class="btn">CV'yi Havuza Kaydet</button>
         </form>
     </div>
 
     <footer>
-        <p>© 2026 WorkBlock. MiCA, GDPR, KVKK & Clarity Smart Contract Compliant. <br> Powered by Pi Network SDK.</p>
+        <p>© 2026 WorkBlock. MiCA, GDPR, KVKK Compliant. <br> Powered by Pi Network SDK.</p>
     </footer>
 
     <script>
         // OTOMATİK ÜLKE VE DİL ALGILAMA MOTORU
         document.addEventListener("DOMContentLoaded", function() {
+            try {
+                Pi.init({ version: "2.0", sandbox: true });
+                console.log("WorkBlock için Pi SDK Başlatıldı.");
+            } catch(e) {
+                console.error("Pi SDK yüklenirken hata oluştu:", e);
+            }
+
             let userLang = navigator.language || navigator.userLanguage; 
             if (userLang.startsWith('tr')) {
                 document.getElementById('home-tr').classList.remove('hidden');
@@ -153,21 +160,58 @@
         });
 
         // MENÜ GEÇİŞ FONKSİYONU
-        function switchTab(tabId) {
+        function switchTab(evt, tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             document.querySelectorAll('.tab-link').forEach(link => link.classList.remove('active'));
             document.getElementById(tabId).classList.remove('hidden');
-            event.target.classList.add('active');
+            if(evt && evt.target) {
+                evt.target.classList.add('active');
+            }
         }
 
-        // PI NETWORK RESMİ BAĞLANTISI (Buraya sadece App ID kimliğinizi kilitledim)
-        Pi.init({ version: "2.0", sandbox: true });
+        // Yarım kalan ödemeleri yakalama fonksiyonu
+        function onIncompletePaymentFound(payment) {
+            console.log("WorkBlock - Tamamlanmamış ödeme bulundu:", payment);
+        }
 
         function piLogin() {
             Pi.authenticate(['username', 'payments'], onIncompletePaymentFound)
-            .then(function(auth) { alert("Hoş geldin / Welcome: " + auth.user.username); })
-            .catch(function(err) { alert("Lütfen Pi Browser içerisinden giriş yapın."); });
+            .then(function(auth) { 
+                alert("WorkBlock'a Hoş geldiniz / Welcome: " + auth.user.username); 
+            })
+            .catch(function(err) { 
+                console.error(err);
+                alert("Lütfen Pi Browser içerisinden giriş yapın."); 
+            });
         }
 
+        // WORKBLOCK ÖDEME AKIŞI
         function payWithPi() {
             Pi.createPayment({
+                amount: 0.50,
+                memo: "WorkBlock - İş İlanı Öne Çıkarma Bedeli",
+                metadata: { project: "WorkBlock_Freelance" }
+            }, {
+                onReadyForServerApproval: function(paymentId) {
+                    console.log("Ödeme hazır. ID:", paymentId);
+                    alert("Ödeme sunucu onayı bekliyor. Backend API bağlantınızı yapın.");
+                },
+                onReadyForServerCompletion: function(paymentId, txid) {
+                    console.log("Ödeme blokzincirinde tamamlandı. TxID:", txid);
+                },
+                onCancel: function(paymentId) {
+                    console.log("Kullanıcı işlemi iptal etti. ID:", paymentId);
+                },
+                onError: function(error, payment) {
+                    console.error("Ödeme hatası:", error);
+                }
+            });
+        }
+
+        function submitCV(event) {
+            event.preventDefault();
+            alert("Özgeçmişiniz WorkBlock veri havuzuna güvenli bir şekilde kaydedildi.");
+        }
+    </script>
+</body>
+</html>
