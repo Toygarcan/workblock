@@ -3,115 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkBlock - Web3 Kariyer ve İş Platformu</title>
-    <!-- Resmi Pi Network SDK Altyapısı -->
-    <script src="https://minepi.com/sdk/v2/js"></script>
+    <title>WorkBlock - Testnet</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 500px;
-            background: white;
-            margin: 40px auto;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+        body { font-family: sans-serif; background-color: #f4f6f9; text-align: center; padding: 20px; }
+        .container { max-width: 500px; background: white; margin: 40px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h1 { color: #5a189a; }
-        p { color: #666; font-size: 16px; line-height: 1.5; }
-        .btn {
-            background-color: #e0aaff;
-            color: #3c096c;
-            border: 2px solid #3c096c;
-            padding: 14px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #3c096c;
-            color: white;
-        }
-        #payment-section {
-            display: none;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px dashed #ddd;
-        }
+        .btn { background-color: #e0aaff; color: #3c096c; border: 2px solid #3c096c; padding: 14px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; }
+        #payment-section { display: none; margin-top: 25px; padding-top: 20px; border-top: 2px dashed #ddd; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>WorkBlock</h1>
-        <p>Pi Network ekosistemine hoş geldiniz. Güvenli giriş yapmak ve 10. adım test ödemesini tamamlamak için aşağıdaki adımları takip edin.</p>
+        <p id="status-text" style="color: #c1121f; font-weight: bold;">Pi Altyapısı Bekleniyor... Lütfen Dokunmayın.</p>
         
         <!-- Giriş Butonu -->
-        <button class="btn" onclick="loginWithPi()">🔑 Pi Cüzdanı ile Güvenli Giriş</button>
+        <button id="main-btn" class="btn" onclick="loginWithPi()" disabled>🔄 Yükleniyor...</button>
 
-        <!-- Ödeme Bölümü (Giriş yapınca açılacak) -->
+        <!-- Ödeme Bölümü -->
         <div id="payment-section">
             <p style="color: #2a9d8f; font-weight: bold;">✓ Kimlik Doğrulandı!</p>
-            <p>10. Adımı (Yeşil Onay) tetiklemek için aşağıdaki test ödemesini gönderin:</p>
             <button class="btn" style="background-color: #3c096c; color: white;" onclick="payWithPi()">💰 Test Ödemesi Yap (0.10 Pi)</button>
         </div>
     </div>
 
+    <!-- Pi SDK Kütüphanesini doğrudan yüklüyoruz -->
+    <script src="https://minepi.com/sdk/v2/js"></script>
     <script>
-        // Pi SDK Başlatılıyor (Sandbox Aktif)
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
+        // Sayfa açılır açılmaz Pi'nin hazır olup olmadığını sürekli kontrol eden döngü
+        const checkPiInterval = setInterval(() => {
+            if (window.Pi || window.PiNetwork) {
+                clearInterval(checkPiInterval); // Hazır olunca aramayı durdur
+                initPiNetwork(); // Pi'yi başlat
+            }
+        }, 500); // Her yarım saniyede bir kontrol et
+
+        function initPiNetwork() {
+            try {
+                const piInstance = window.Pi || window.PiNetwork;
+                piInstance.init({ version: "2.0", sandbox: true });
+                
+                // Ekranı güncelle ve butonu aktif et
+                document.getElementById("status-text").innerText = "✓ Pi Altyapısı Hazır! Giriş Yapabilirsiniz.";
+                document.getElementById("status-text").style.color = "#2a9d8f";
+                document.getElementById("main-btn").innerText = "🔑 Pi Cüzdanı ile Güvenli Giriş";
+                document.getElementById("main-btn").disabled = false;
+            } catch (e) {
+                alert("Başlatma Hatası: " + e.message);
+            }
+        }
 
         // Giriş Fonksiyonu
         async function loginWithPi() {
+            const piInstance = window.Pi || window.PiNetwork;
+            if (!piInstance) return;
+
             try {
-                const auth = await Pi.authenticate(['username', 'payments'], function(onIncompletePayment) {
-                    console.log("Yarım kalan ödeme:", onIncompletePayment);
+                const auth = await piInstance.authenticate(['username', 'payments'], function(onIncompletePayment) {
+                    console.log(onIncompletePayment);
                 });
                 
                 alert("Giriş Başarılı! Hoş geldin: " + auth.user.username);
-                // Giriş başarılı olunca ödeme butonunu göster
                 document.getElementById("payment-section").style.display = "block";
             } catch (error) {
-                alert("Pi Giriş Hatası: " + error.message + "\n\nLütfen sayfayı Pi Browser içindeki o özel Sandbox linkiyle açtığınızdan emin olun!");
+                alert("Pi Giriş Hatası: " + error.message);
             }
         }
 
         // Ödeme Fonksiyonu
         async function payWithPi() {
+            const piInstance = window.Pi || window.PiNetwork;
+            if (!piInstance) return;
+
             try {
-                const payment = await Pi.createPayment({
+                await piInstance.createPayment({
                     amount: 0.10,
                     memo: "WorkBlock 10. Adim Test Odemesi",
                     metadata: { orderId: "workblock_test_1" },
                 }, {
-                    onReadyForServerApproval: function(paymentId) {
-                        console.log("Server onayı bekleniyor. ID:", paymentId);
-                    },
+                    onReadyForServerApproval: function(paymentId) { console.log(paymentId); },
                     onReadyForServerCompletion: function(paymentId, txid) {
-                        alert("Tebrikler! Ödeme Başarıyla Tamamlandı. Şimdi Developer Portal'a gidip kontrol edebilirsiniz.");
+                        alert("Tebrikler! Ödeme Başarılı. 10. Madde Yeşil Oldu!");
                     },
-                    onCancel: function(paymentId) {
-                        alert("Ödeme kullanıcı tarafından iptal edildi.");
-                    },
-                    onError: function(error, payment) {
-                        alert("Ödeme Hatası: " + error.message);
-                    }
+                    onCancel: function(paymentId) { alert("İptal edildi."); },
+                    onError: function(error, payment) { alert("Hata: " + error.message); }
                 });
             } catch (err) {
                 alert("Ödeme başlatılamadı: " + err.message);
             }
         }
     </script>
-
 </body>
 </html>
