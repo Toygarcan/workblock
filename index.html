@@ -139,7 +139,8 @@
         // OTOMATİK ÜLKE VE DİL ALGILAMA MOTORU
         document.addEventListener("DOMContentLoaded", function() {
             try {
-                Pi.init({ version: "2.0", sandbox: true });
+                // Sizin benzersiz slug tanımınızla SDK başlatılıyor
+                Pi.init({ version: "2.0", sandbox: true, slug: "workblock-m699" });
                 console.log("WorkBlock için Pi SDK Başlatıldı.");
             } catch(e) {
                 console.error("Pi SDK yüklenirken hata oluştu:", e);
@@ -169,7 +170,6 @@
             }
         }
 
-        // Yarım kalan ödemeleri yakalama fonksiyonu
         function onIncompletePaymentFound(payment) {
             console.log("WorkBlock - Tamamlanmamış ödeme bulundu:", payment);
         }
