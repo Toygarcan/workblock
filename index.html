@@ -1,45 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workblock | Decentralized Web3 Employment</title>
-    <meta name="description" content="Workblock: A global, MiCA-compliant decentralized career ecosystem. Secure, transparent, and regulatory-aligned Web3 work solutions.">
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .box { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
-        h1 { color: #2d3436; font-size: 24px; margin-bottom: 10px; }
-        p { color: #636e72; font-size: 14px; margin-bottom: 25px; }
-        .btn { background-color: #6c5ce7; color: white; border: none; padding: 15px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
-        #log { margin-top: 20px; font-size: 12px; color: #2d3436; text-align: left; background: #eee; padding: 10px; border-radius: 5px; height: 100px; overflow-y: auto; }
-    </style>
-</head>
-<body>
-
-<div class="box">
-    <h1>Workblock</h1>
-    <p>Global Regulatory-Aligned Web3 Employment</p>
-    <button class="btn" onclick="initWorkblock()">Authorize Workblock Wallet</button>
-    <div id="log">Status: Ready for secure connection.</div>
-</div>
-
-<script>
-    window.Pi.init({ version: "2.0", sandbox: false });
-    const logDiv = document.getElementById('log');
-
-    function log(msg) { logDiv.innerHTML += "<br>» " + msg; }
-
-    function initWorkblock() {
-        log("MiCA-compliant protocol initializing...");
-        window.Pi.authenticate(['username', 'payments'], () => {})
-        .then(auth => {
-            log("User Verified: " + auth.user.username);
-            log("Regulatory handshake completed.");
-        })
-        .catch(err => log("Auth Error: " + err.message));
+async function authorizeWallet() {
+    try {
+        const scopes = ['wallet'];
+        // Aşağıdaki kısım Pi Browser'ın cüzdanı açmasını tetikler
+        const auth = await Pi.authenticate(scopes, (err) => {
+            console.error("Yetkilendirme hatası: " + err);
+        });
+        
+        // Başarılı olursa durum güncellenir
+        document.getElementById('status').innerText = "Cüzdan bağlandı: " + auth.user.username;
+    } catch (err) {
+        document.getElementById('status').innerText = "Hata oluştu, lütfen tekrar deneyin.";
+        console.log(err);
     }
-</script>
-
-</body>
-</html>
+}
