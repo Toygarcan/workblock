@@ -3,67 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workblock | Web3 Kariyer</title>
+    <title>Workblock | Geleceğin Kariyer Ekosistemi</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f4f4f4; color: #333; }
-        .page { display: none; padding: 20px; padding-bottom: 80px; }
+        :root { --primary: #4a148c; --bg: #f8f9fa; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background: var(--bg); }
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
         .active { display: block; }
-        .navbar { position: fixed; bottom: 0; width: 100%; display: flex; background: #4a148c; color: white; border-top: 2px solid #311b92; }
-        .nav-item { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-size: 14px; }
-        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header { background: #6a1b9a; color: white; padding: 20px; text-align: center; }
-        button { width: 100%; padding: 15px; background: #7b1fa2; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        .nav { position: fixed; bottom: 0; width: 100%; display: flex; background: white; border-top: 1px solid #ddd; padding: 10px 0; justify-content: space-around; }
+        .nav-item { cursor: pointer; text-align: center; color: #555; font-size: 12px; }
+        
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- GİRİŞ EKRANI -->
-    <div id="page-login" class="page active">
-        <div class="header"><h1>Workblock</h1></div>
-        <p style="text-align:center; padding: 20px;">Geleceğin Merkeziyetsiz Kariyer Ekosistemine hoş geldiniz. Pi KYC ve akıllı sözleşmeler ile güvenli kariyer yönetimi.</p>
-        <button onclick="authorizeUser()">Pi ile Güvenli Giriş Yap</button>
+    <div id="p-login" class="page active">
+        <div class="header"><h1>Workblock</h1><p>Web3 Kariyer Ekosistemi</p></div>
+        <p style="text-align:center; margin-top:50px;">Pi KYC altyapısı ile liyakat esaslı profesyonel ağa katılın.</p>
+        <button onclick="auth()">Pi ile Güvenli Giriş</button>
     </div>
 
-    <!-- ANA EKRAN (İşler) -->
-    <div id="page-home" class="page">
+    <div id="p-jobs" class="page">
         <h2>Aktif İlanlar</h2>
-        <div class="card"><strong>Web3 Developer</strong><br>Pi tabanlı dApp geliştirme. <br>Bütçe: 500π</div>
-        <div class="card"><strong>NFT Tasarımcısı</strong><br>Sertifikasyon görselleştirme. <br>Bütçe: 250π</div>
+        <div class="card"><strong>Senior Web3 Developer</strong><br>Bütçe: 500π | Liyakat: Yüksek</div>
+        <div class="card"><strong>İçerik Editörü</strong><br>Bütçe: 150π | Liyakat: Orta</div>
     </div>
 
-    <!-- PROFİL EKRANI -->
-    <div id="page-profile" class="page">
-        <h2>Profilim</h2>
+    <div id="p-profile" class="page">
+        <h2>Kurumsal Profil</h2>
         <div class="card">
-            <p id="usernameDisplay">Kullanıcı: Yükleniyor...</p>
-            <p><strong>İtibar Skoru:</strong> 98/100</p>
-            <p><strong>Yetkinlikler:</strong> Blockchain, Web3, Solidity</p>
+            <p id="userStatus">Kullanıcı: Bağlanıyor...</p>
+            <p><strong>İtibar Skoru:</strong> 98.4 / 100</p>
+            <p><strong>Blockchain Sertifikalar:</strong> 3 Adet</p>
         </div>
+        <p style="font-size: 0.9em; color: #666;">Gizlilik Politikası: Verileriniz Pi Network akıllı sözleşmeleri ile korunmaktadır.</p>
     </div>
 
-    <!-- MENÜ -->
-    <div class="navbar" id="navbar" style="display:none;">
-        <div class="nav-item" onclick="showPage('home')">İş İlanları</div>
-        <div class="nav-item" onclick="showPage('profile')">Profil</div>
+    <div class="nav" id="menu" style="display:none;">
+        <div class="nav-item" onclick="show('jobs')">🔍 İşler</div>
+        <div class="nav-item" onclick="show('profile')">👤 Profil</div>
     </div>
 
     <script>
         Pi.init({ version: "2.0" });
-
-        async function authorizeUser() {
+        async function auth() {
             try {
-                const auth = await Pi.authenticate(['username'], () => {});
-                document.getElementById('page-login').style.display = 'none';
-                document.getElementById('navbar').style.display = 'flex';
-                document.getElementById('usernameDisplay').innerText = "Kullanıcı Adı: " + auth.user.username;
-                showPage('home');
-            } catch (err) { alert("Yetkilendirme hatası: " + err); }
+                const user = await Pi.authenticate(['username'], () => {});
+                document.getElementById('p-login').classList.remove('active');
+                document.getElementById('p-jobs').classList.add('active');
+                document.getElementById('menu').style.display = 'flex';
+                document.getElementById('userStatus').innerText = "Kullanıcı: " + user.user.username;
+            } catch(e) { alert("Yetkilendirme Gerekli."); }
         }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
+        function show(p) {
+            document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+            document.getElementById('p-' + p).classList.add('active');
         }
     </script>
 </body>
