@@ -3,40 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workblock | Geleceğin Kariyer Ekosistemi</title>
+    <title>Workblock | Web3 Kariyer</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        button { width: 100%; padding: 15px; background: #6a1b9a; color: white; border: none; border-radius: 10px; font-weight: bold; }
-        .hidden { display: none; }
-        h1 { color: #333; }
-        .badge { background: #e1bee7; padding: 5px 10px; border-radius: 5px; font-size: 0.8em; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f4f4f4; color: #333; }
+        .page { display: none; padding: 20px; padding-bottom: 80px; }
+        .active { display: block; }
+        .navbar { position: fixed; bottom: 0; width: 100%; display: flex; background: #4a148c; color: white; border-top: 2px solid #311b92; }
+        .nav-item { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-size: 14px; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .header { background: #6a1b9a; color: white; padding: 20px; text-align: center; }
+        button { width: 100%; padding: 15px; background: #7b1fa2; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <!-- GİRİŞ EKRANI -->
-    <div id="loginScreen" class="card">
-        <h1>Workblock</h1>
-        <p>Geleceğin Merkeziyetsiz Kariyer Ekosistemine Hoş Geldiniz.</p>
-        <button id="authBtn" onclick="authorizeUser()">Pi ile Giriş Yap</button>
-        <p id="status"></p>
+    <div id="page-login" class="page active">
+        <div class="header"><h1>Workblock</h1></div>
+        <p style="text-align:center; padding: 20px;">Geleceğin Merkeziyetsiz Kariyer Ekosistemine hoş geldiniz. Pi KYC ve akıllı sözleşmeler ile güvenli kariyer yönetimi.</p>
+        <button onclick="authorizeUser()">Pi ile Güvenli Giriş Yap</button>
     </div>
 
-    <!-- DİJİTAL KARİYER DASHBOARD -->
-    <div id="dashboard" class="card hidden">
-        <h2 id="welcomeMsg"></h2>
-        <div class="badge">Liyakat Esaslı Kariyer Yönetimi</div>
-        
-        <h3>Özellikler</h3>
-        <ul>
-            <li><b>İtibar Skoru:</b> Zincir üstü denetlenebilir puan.</li>
-            <li><b>NFT Sertifikalar:</b> Blockchain onaylı yetkinlikler.</li>
-            <li><b>Akıllı Sözleşmeler:</b> Güvenli iş yönetimi.</li>
-        </ul>
-        
-        <button onclick="alert('Metaverse mülakatları yakında aktif!')">Sanal Mülakatlara Katıl</button>
+    <!-- ANA EKRAN (İşler) -->
+    <div id="page-home" class="page">
+        <h2>Aktif İlanlar</h2>
+        <div class="card"><strong>Web3 Developer</strong><br>Pi tabanlı dApp geliştirme. <br>Bütçe: 500π</div>
+        <div class="card"><strong>NFT Tasarımcısı</strong><br>Sertifikasyon görselleştirme. <br>Bütçe: 250π</div>
+    </div>
+
+    <!-- PROFİL EKRANI -->
+    <div id="page-profile" class="page">
+        <h2>Profilim</h2>
+        <div class="card">
+            <p id="usernameDisplay">Kullanıcı: Yükleniyor...</p>
+            <p><strong>İtibar Skoru:</strong> 98/100</p>
+            <p><strong>Yetkinlikler:</strong> Blockchain, Web3, Solidity</p>
+        </div>
+    </div>
+
+    <!-- MENÜ -->
+    <div class="navbar" id="navbar" style="display:none;">
+        <div class="nav-item" onclick="showPage('home')">İş İlanları</div>
+        <div class="nav-item" onclick="showPage('profile')">Profil</div>
     </div>
 
     <script>
@@ -44,17 +53,17 @@
 
         async function authorizeUser() {
             try {
-                const auth = await Pi.authenticate(['username'], (err) => {
-                    document.getElementById('status').innerText = "Hata: " + err;
-                });
-                
-                // Başarılı giriş sonrası ekranı değiştir
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('welcomeMsg').innerText = "Hoş geldin, " + auth.user.username;
-            } catch (err) {
-                document.getElementById('status').innerText = "Yetkilendirme iptal edildi.";
-            }
+                const auth = await Pi.authenticate(['username'], () => {});
+                document.getElementById('page-login').style.display = 'none';
+                document.getElementById('navbar').style.display = 'flex';
+                document.getElementById('usernameDisplay').innerText = "Kullanıcı Adı: " + auth.user.username;
+                showPage('home');
+            } catch (err) { alert("Yetkilendirme hatası: " + err); }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
         }
     </script>
 </body>
