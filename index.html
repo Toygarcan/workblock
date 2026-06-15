@@ -1,46 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workblock</title>
+    <title>Workblock | Geleceğin Kariyer Ekosistemi</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f0f0f0; }
-        button { padding: 20px 40px; font-size: 20px; background-color: #6a1b9a; color: white; border: none; border-radius: 10px; cursor: pointer; }
-        #status { margin-top: 20px; font-weight: bold; color: #333; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        button { width: 100%; padding: 15px; background: #6a1b9a; color: white; border: none; border-radius: 10px; font-weight: bold; }
+        .hidden { display: none; }
+        h1 { color: #333; }
+        .badge { background: #e1bee7; padding: 5px 10px; border-radius: 5px; font-size: 0.8em; }
     </style>
 </head>
 <body>
 
-    <h1>Workblock</h1>
-    <p>Global Regulatory-Aligned Web3 Employment</p>
+    <!-- GİRİŞ EKRANI -->
+    <div id="loginScreen" class="card">
+        <h1>Workblock</h1>
+        <p>Geleceğin Merkeziyetsiz Kariyer Ekosistemine Hoş Geldiniz.</p>
+        <button id="authBtn" onclick="authorizeUser()">Pi ile Giriş Yap</button>
+        <p id="status"></p>
+    </div>
 
-    <button id="authBtn" onclick="authorizeUser()">Authorize User</button>
-    <p id="status">Hazır...</p>
+    <!-- DİJİTAL KARİYER DASHBOARD -->
+    <div id="dashboard" class="card hidden">
+        <h2 id="welcomeMsg"></h2>
+        <div class="badge">Liyakat Esaslı Kariyer Yönetimi</div>
+        
+        <h3>Özellikler</h3>
+        <ul>
+            <li><b>İtibar Skoru:</b> Zincir üstü denetlenebilir puan.</li>
+            <li><b>NFT Sertifikalar:</b> Blockchain onaylı yetkinlikler.</li>
+            <li><b>Akıllı Sözleşmeler:</b> Güvenli iş yönetimi.</li>
+        </ul>
+        
+        <button onclick="alert('Metaverse mülakatları yakında aktif!')">Sanal Mülakatlara Katıl</button>
+    </div>
 
     <script>
         Pi.init({ version: "2.0" });
 
         async function authorizeUser() {
             try {
-                // Kullanıcıdan izin almayı deniyoruz
                 const auth = await Pi.authenticate(['username'], (err) => {
                     document.getElementById('status').innerText = "Hata: " + err;
                 });
                 
-                // auth nesnesinin içindeki user verisini kontrol ediyoruz
-                if (auth && auth.user) {
-                    document.getElementById('status').innerText = "Hoş geldin, " + auth.user.username;
-                    console.log("Kullanıcı verisi:", auth.user);
-                } else {
-                    document.getElementById('status').innerText = "Kullanıcı bilgisi alınamadı.";
-                }
+                // Başarılı giriş sonrası ekranı değiştir
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('welcomeMsg').innerText = "Hoş geldin, " + auth.user.username;
             } catch (err) {
-                document.getElementById('status').innerText = "Yetkilendirme sırasında bir sorun oluştu.";
+                document.getElementById('status').innerText = "Yetkilendirme iptal edildi.";
             }
         }
     </script>
 </body>
 </html>
-
