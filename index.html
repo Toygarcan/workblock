@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workblock</title>
-    <!-- Pi SDK Başlatma -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
         body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f0f0f0; }
@@ -17,23 +16,22 @@
     <h1>Workblock</h1>
     <p>Global Regulatory-Aligned Web3 Employment</p>
 
-    <button id="authBtn" onclick="authorizeWallet()">Authorize Workblock Wallet</button>
+    <button id="authBtn" onclick="authorizeUser()">Authorize User</button>
     <p id="status">Hazır...</p>
 
     <script>
-        // Pi SDK init
         Pi.init({ version: "2.0" });
 
-        async function authorizeWallet() {
-            document.getElementById('status').innerText = "Cüzdan bağlantısı bekleniyor...";
+        async function authorizeUser() {
+            document.getElementById('status').innerText = "Bağlanıyor...";
             try {
-                const scopes = ['wallet'];
-                const auth = await Pi.authenticate(scopes, (err) => {
-                    document.getElementById('status').innerText = "Yetkilendirme reddedildi: " + err;
+                // Burada scopes listesini boş bıraktık ki izin hatası almayasın
+                const auth = await Pi.authenticate([], (err) => {
+                    document.getElementById('status').innerText = "Hata: " + err;
                 });
-                document.getElementById('status').innerText = "Başarılı! Kullanıcı: " + auth.user.username;
+                document.getElementById('status').innerText = "Hoş geldin, " + auth.user.username;
             } catch (err) {
-                document.getElementById('status').innerText = "Hata oluştu: " + err;
+                document.getElementById('status').innerText = "İşlem iptal edildi veya hata oluştu.";
             }
         }
     </script>
