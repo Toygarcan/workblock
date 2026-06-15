@@ -23,18 +23,24 @@
         Pi.init({ version: "2.0" });
 
         async function authorizeUser() {
-            document.getElementById('status').innerText = "Bağlanıyor...";
             try {
-                // Burada scopes listesini boş bıraktık ki izin hatası almayasın
-                const auth = await Pi.authenticate([], (err) => {
+                // Kullanıcıdan izin almayı deniyoruz
+                const auth = await Pi.authenticate(['username'], (err) => {
                     document.getElementById('status').innerText = "Hata: " + err;
                 });
-                document.getElementById('status').innerText = "Hoş geldin, " + auth.user.username;
+                
+                // auth nesnesinin içindeki user verisini kontrol ediyoruz
+                if (auth && auth.user) {
+                    document.getElementById('status').innerText = "Hoş geldin, " + auth.user.username;
+                    console.log("Kullanıcı verisi:", auth.user);
+                } else {
+                    document.getElementById('status').innerText = "Kullanıcı bilgisi alınamadı.";
+                }
             } catch (err) {
-                document.getElementById('status').innerText = "İşlem iptal edildi veya hata oluştu.";
+                document.getElementById('status').innerText = "Yetkilendirme sırasında bir sorun oluştu.";
             }
         }
     </script>
-
 </body>
 </html>
+
